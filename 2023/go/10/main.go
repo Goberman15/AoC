@@ -30,7 +30,7 @@ func main() {
 
 	step, visited := findFarthestPoint(pipes)
 
-	fmt.Println("step", step/2)
+	fmt.Println("step", step)
 
 	internal := countNestField(pipes, visited)
 
@@ -170,7 +170,7 @@ func findFarthestPoint(pipes [][]string) (int, map[string]bool) {
 		}
 	}
 
-	return step, visited
+	return step/2, visited
 }
 
 func countNestField(pipes [][]string, visited map[string]bool) int {
