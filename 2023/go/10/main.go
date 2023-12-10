@@ -170,7 +170,7 @@ func findFarthestPoint(pipes [][]string) (int, map[string]bool) {
 		}
 	}
 
-	return step/2, visited
+	return step / 2, visited
 }
 
 func countNestField(pipes [][]string, visited map[string]bool) int {
@@ -183,32 +183,23 @@ func countNestField(pipes [][]string, visited map[string]bool) int {
 		if y == 0 || y >= len(pipes) {
 			continue
 		}
-		for x := range row {
-			// first and last column can't be part of internal field
-			if x == 0 || x >= len(row) {
-				continue
-			}
 
+		rowFence := 0
+		for x, v := range row {
 			currStr := fmt.Sprintf("%d-%d", y, x)
-			rowFence := 0
 
 			if visited[currStr] {
+				if slices.Contains(pipe, v) {
+					rowFence++
+				}
 				continue
 			}
 
-			for i := x; i < len(row); i++ {
-				if slices.Contains(pipe, row[i]) && visited[fmt.Sprintf("%d-%d", y, i)] {
-					if row[i] != "S" {
-						rowFence++
-						continue
-					}
-
-					// if it S, check if S has connetion to down, if yes count it
-					// if choose to check for up at line 179, check for up here, not down
-					if row[i] == "S" && visited[fmt.Sprintf("%d-%d", y-1, i)] {
-						rowFence++
-					}
-				}
+			// if it S, check if S has connetion to down, if yes count it
+			// if choose to check for up at line 179, check for up here, not down
+			if v == "S" && visited[fmt.Sprintf("%d-%d", y+1, x)] {
+				rowFence++
+				continue
 			}
 
 			if rowFence%2 != 0 {
