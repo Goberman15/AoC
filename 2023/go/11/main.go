@@ -168,21 +168,21 @@ func createDistMatrix(coords [][2]int, emptyRows []int, emptyCols []int, expansi
 			x, y := 0, 0
 
 			if coords[end][0] > coords[start][0] {
-				exp := checkExpansion(coords[start][0], coords[end][0], emptyCols, expansionRate)
+				exp := calculateExpansion(coords[start][0], coords[end][0], emptyCols, expansionRate)
 				x = coords[end][0] - coords[start][0]
 				x += exp
 			} else {
-				exp := checkExpansion(coords[end][0], coords[start][0], emptyCols, expansionRate)
+				exp := calculateExpansion(coords[end][0], coords[start][0], emptyCols, expansionRate)
 				x = coords[start][0] - coords[end][0]
 				x += exp
 			}
 
 			if coords[end][1] > coords[start][1] {
-				exp := checkExpansion(coords[start][1], coords[end][1], emptyRows, expansionRate)
+				exp := calculateExpansion(coords[start][1], coords[end][1], emptyRows, expansionRate)
 				y = coords[end][1] - coords[start][1]
 				y += exp
 			} else {
-				exp := checkExpansion(coords[end][1], coords[start][1], emptyRows, expansionRate)
+				exp := calculateExpansion(coords[end][1], coords[start][1], emptyRows, expansionRate)
 				y = coords[start][1] - coords[end][1]
 				y += exp
 			}
@@ -195,14 +195,12 @@ func createDistMatrix(coords [][2]int, emptyRows []int, emptyCols []int, expansi
 	return dists
 }
 
-func checkExpansion(start int, end int, emptySlc []int, expRate int) int {
+func calculateExpansion(start int, end int, emptySlc []int, expRate int) int {
 	expansion := 0
-	empty := 0
 	for _, v := range emptySlc {
 		if v > start && v < end {
-			expansion += expRate
-			empty++
+			expansion += expRate - 1
 		}
 	}
-	return expansion - empty
+	return expansion
 }
