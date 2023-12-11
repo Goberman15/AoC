@@ -175,8 +175,9 @@ func findFarthestPoint(pipes [][]string) (int, map[string]bool) {
 
 func countNestField(pipes [][]string, visited map[string]bool) int {
 	internal := 0
-	// choose all down or all up, because on one side must there must be odd number of pipe to consider a point as inside
-	pipe := []string{"|", "F", "7"}
+	// choose all down or all up, because on one side of the field there must be odd number of pipe to consider a point as inside
+	pipeDown := []string{"|", "F", "7"}
+	pipeUp := []string{"|", "L", "J"}
 
 	for y, row := range pipes {
 		// first and last row can't be part of internal field
@@ -188,17 +189,17 @@ func countNestField(pipes [][]string, visited map[string]bool) int {
 		for x, v := range row {
 			currStr := fmt.Sprintf("%d-%d", y, x)
 
-			if visited[currStr] {
-				if slices.Contains(pipe, v) {
-					rowFence++
-				}
+			// if it S, check if S has connetion to down, if yes count it
+			// if choose to check for up at line 179, check for up here, not down
+			if v == "S" && visited[fmt.Sprintf("%d-%d", y+1, x)] && slices.Contains(pipeUp, pipes[y+1][x]) {
+				rowFence++
 				continue
 			}
 
-			// if it S, check if S has connetion to down, if yes count it
-			// if choose to check for up at line 179, check for up here, not down
-			if v == "S" && visited[fmt.Sprintf("%d-%d", y+1, x)] {
-				rowFence++
+			if visited[currStr] {
+				if slices.Contains(pipeDown, v) {
+					rowFence++
+				}
 				continue
 			}
 
